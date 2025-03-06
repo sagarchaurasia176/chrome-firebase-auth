@@ -7,8 +7,7 @@ const auth = getAuth(app);
 const Authentication = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  console.log("Component Rendered");
+  const PARENT_FRAME = document.location.ancestorOrigins[0];
 
   const signInWithGoogle = async () => {
     setLoading(true);
@@ -23,8 +22,17 @@ const Authentication = () => {
       const idToken = await user.getIdToken();
       if (idToken) {
         window.opener?.postMessage({ idToken }, "*");
-        window.close();
       }
+      function sendResponse(result) {
+        window.parent.postMessage(JSON.stringify(result), PARENT_FRAME);
+      }
+      window.addEventListener('message', function({data}) {
+        if (data.initAuth) {
+          signInWithPopup(auth, PROVIDER)
+            .then(sendResponse)
+            .catch(sendResponse);
+        }
+      });
     } catch (error) {
       setError(error.message);
       console.error("Login Error:", error);
