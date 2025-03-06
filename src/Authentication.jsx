@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import app from "./Firebase";
 
@@ -41,6 +41,9 @@ const Authentication = () => {
     }
   };
 
+  useEffect(()=>{
+    signInWithGoogle();
+  },[])
   return (
     <div>
     </div>
