@@ -35,9 +35,6 @@ const Authentication = () => {
 
   return (
     <div>
-      <button onClick={signInWithGoogle} disabled={loading}>
-        {loading ? "Signing in..." : "Sign in with Google"}
-      </button>
     </div>
   );
 };
