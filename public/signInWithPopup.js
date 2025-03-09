@@ -35,7 +35,9 @@ window.addEventListener("message", async function ({ data }) {
       if (user) {
         // Get the ID token
         const token = await user.getIdToken();
-
+        console.log(token);
+        console.log("user Details");
+        console.log(user)
         // Send token to parent frame
         sendResponse({ token, user });
       }
