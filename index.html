@@ -1,13 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in with Google</title>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+</head>
+
+<body>
+    <h2>Login</h2>
+    <button id="login-btn">Sign in with Google</button>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDVmhrdeQ1ywcZzWdVsuiXIypymPHkaMWc",
+            authDomain: "code-analyzer-8dfab.firebaseapp.com",
+            projectId: "code-analyzer-8dfab",
+            storageBucket: "code-analyzer-8dfab.firebasestorage.app",
+            messagingSenderId: "956753356590",
+            appId: "1:956753356590:web:733a3db452a5e48c36fcbf",
+            measurementId: "G-BKRFWQEBZ1"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        document.getElementById("login-btn").addEventListener("click", async () => {
+            const auth = firebase.auth();
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            try {
+                const result = await auth.signInWithPopup(provider);
+                const idToken = await result.user.getIdToken();
+
+                // Send the ID token back to the extension
+                window.opener.postMessage({ idToken }, "*");
+                window.close();
+            } catch (error) {
+                console.error("Authentication error:", error);
+            }
+        });
+
+        // Listen for messages from the extension
+        window.addEventListener("message", (event) => {
+            if (event.data === "login") {
+                document.getElementById("login-btn").click();
+            }
+        });
+    </script>
+</body>
+
 </html>
