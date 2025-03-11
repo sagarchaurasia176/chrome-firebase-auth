@@ -24,7 +24,7 @@ const PROVIDER = new GoogleAuthProvider();
 // const PARENT_FRAME = document.location.ancestorOrigins[0];
 const PARENT_FRAME = window.origin;  // Allow messages to be sent to any parent
 console.log("Parent Frame URL:", PARENT_FRAME);
-
+// yest
 
 function sendResponse(result) {
   window.parent.postMessage(JSON.stringify(result), PARENT_FRAME);
