@@ -16,32 +16,35 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = getAuth(app);
+
 const PROVIDER = new GoogleAuthProvider();
 
 // This gives you a reference to the parent frame, i.e. the offscreen document.
-const PARENT_FRAME = document.location.ancestorOrigins[0];
+// const PARENT_FRAME = document.location.ancestorOrigins[0];
+const PARENT_FRAME = "*";  // Allow messages to be sent to any parent
+
 
 function sendResponse(result) {
   window.parent.postMessage(JSON.stringify(result), PARENT_FRAME);
 }
+
 
 window.addEventListener("message", async function ({ data }) {
   if (data.initAuth) {
     try {
       const result = await signInWithPopup(auth, PROVIDER);
       const user = result.user;
-
+      console.log("user detail fetched from hosted webPage" , user);
       if (user) {
         // Get the ID token
-        const token = await user.getIdToken();
-        console.log(token);
-        console.log("user Details");
-        console.log(user)
+        const idToken = await user.getIdToken();
+        console.log(idToken);
         // Send token to parent frame
-        sendResponse({ token, user });
+        sendResponse({idToken, user });
       }
     } catch (error) {
+      console.log("error fetch from hosted page !")
       sendResponse({ error: error.message });
     }
   }
