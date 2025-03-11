@@ -21,8 +21,8 @@ const auth = getAuth(app);
 const PROVIDER = new GoogleAuthProvider();
 
 // This gives you a reference to the parent frame, i.e. the offscreen document.
+const PARENT_FRAME = "chrome-extension://fmjgimepnoffjjongiedkgbanfnhobkk"; // Set it manually
 // const PARENT_FRAME = document.location.ancestorOrigins[0];
-const PARENT_FRAME = document.location.ancestorOrigins[0];  // Allow messages to be sent to any parent
 console.log("Parent Frame URL:", PARENT_FRAME);
 // yest
 
